@@ -1,0 +1,1245 @@
+<title>Base-Camp Comparator Dossier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+  /* ---------------------------------------------------------------
+     Palette: schematic transit-chart. Teal signal ink on cool paper,
+     ochre as the second signal (over budget / warning). Neutrals are
+     biased toward the teal so nothing reads as default grey.
+     --------------------------------------------------------------- */
+  :root {
+    --paper:      #F2F6F5;
+    --sheet:      #FFFFFF;
+    --ink:        #12201F;
+    --ink-soft:   #405351;
+    --muted:      #6B7C79;
+    --rule:       #DCE6E4;
+    --rule-firm:  #C2D2CF;
+    --signal:     #0F6B63;
+    --signal-dim: #E2EFED;
+    --ochre:      #A55F17;
+    --ochre-dim:  #F7EBDC;
+    --plate:      #EDF3F2;
+
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #0C1413;
+      --sheet:      #131E1D;
+      --ink:        #E7EFED;
+      --ink-soft:   #B3C4C1;
+      --muted:      #839794;
+      --rule:       #24322F;
+      --rule-firm:  #33443F;
+      --signal:     #45B8A9;
+      --signal-dim: #17302D;
+      --ochre:      #D69A50;
+      --ochre-dim:  #2E2418;
+      --plate:      #182524;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #0C1413;
+    --sheet:      #131E1D;
+    --ink:        #E7EFED;
+    --ink-soft:   #B3C4C1;
+    --muted:      #839794;
+    --rule:       #24322F;
+    --rule-firm:  #33443F;
+    --signal:     #45B8A9;
+    --signal-dim: #17302D;
+    --ochre:      #D69A50;
+    --ochre-dim:  #2E2418;
+    --plate:      #182524;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.62;
+    margin: 0;
+    padding: 40px 24px 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    max-width: 940px;
+    margin: 0 auto 36px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .masthead h1 {
+    font-family: var(--sans);
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .masthead .sub {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 8px 0 0;
+  }
+  .masthead .cand {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--signal);
+    background: var(--signal-dim);
+    border: 1px solid var(--signal);
+    padding: 3px 10px;
+    margin-top: 10px;
+  }
+  .masthead .meta {
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+  .masthead .meta b { color: var(--signal); font-weight: 500; }
+
+  /* ---------- contents rail ---------- */
+
+  .contents {
+    max-width: 940px;
+    margin: 0 auto 44px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .contents a {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: var(--ink-soft);
+    background: var(--sheet);
+    border: 1px solid var(--rule);
+    padding: 6px 10px;
+    transition: border-color .15s, color .15s;
+  }
+  .contents a:hover, .contents a:focus-visible {
+    color: var(--signal);
+    border-color: var(--signal);
+  }
+  .contents a span { color: var(--muted); }
+
+  /* ---------- sheet ---------- */
+
+  .sheet {
+    max-width: 940px;
+    margin: 0 auto 34px;
+    background: var(--sheet);
+    border: 1px solid var(--rule);
+    padding: 46px 54px 52px;
+  }
+  .sheet-head {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    padding-bottom: 14px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--rule-firm);
+  }
+  .plate-no {
+    font-family: var(--mono);
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--signal);
+    font-variant-numeric: tabular-nums;
+  }
+  .sheet-head .titles { flex: 1; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 4px;
+  }
+  .sheet-head h2 {
+    font-family: var(--sans);
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .sheet p { max-width: 68ch; }
+  .sheet > p:first-of-type { margin-top: 0; }
+
+  h3 {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin: 30px 0 10px;
+  }
+  h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 8px;
+    font-weight: 500;
+  }
+
+  strong { font-weight: 600; }
+  code {
+    font-family: var(--mono);
+    font-size: 0.87em;
+    background: var(--plate);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  .lede {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .note {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- callout / quote ---------- */
+
+  blockquote {
+    margin: 18px 0;
+    padding: 14px 20px;
+    border-left: 3px solid var(--signal);
+    background: var(--signal-dim);
+    font-size: 15px;
+  }
+  blockquote p { margin: 0 0 10px; max-width: 66ch; }
+  blockquote p:last-child { margin-bottom: 0; }
+  blockquote cite {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-style: normal;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  .flag {
+    margin: 18px 0;
+    padding: 14px 18px;
+    border-left: 3px solid var(--ochre);
+    background: var(--ochre-dim);
+    font-size: 14.5px;
+  }
+  .flag p { margin: 0; max-width: 66ch; }
+  .flag strong { color: var(--ochre); }
+
+  /* ---------- figures ---------- */
+
+  figure { margin: 22px 0; }
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule-firm);
+    background: var(--plate);
+  }
+  figcaption {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-top: 11px;
+    padding-left: 14px;
+    border-left: 2px solid var(--signal);
+    max-width: 74ch;
+  }
+  figcaption .shotno {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--signal);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .figpair {
+    display: grid;
+    grid-template-columns: 0.58fr 1fr;
+    gap: 22px;
+    align-items: start;
+    margin: 22px 0;
+  }
+  .figpair figure { margin: 0; }
+  @media (max-width: 760px) { .figpair { grid-template-columns: 1fr; } }
+
+  /* ---------- checklist ---------- */
+
+  .checkgroup { margin-bottom: 26px; }
+  .checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .checklist li { margin: 0; }
+  .checklist label {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 7px 10px;
+    font-size: 15px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background .12s, border-color .12s;
+  }
+  .checklist label:hover { background: var(--plate); }
+  .checklist input {
+    appearance: none;
+    flex: none;
+    width: 17px; height: 17px;
+    margin: 4px 0 0;
+    border: 1.5px solid var(--rule-firm);
+    background: var(--sheet);
+    cursor: pointer;
+    position: relative;
+  }
+  .checklist input:checked { border-color: var(--signal); background: var(--signal); }
+  .checklist input:checked::after {
+    content: "";
+    position: absolute;
+    left: 4.5px; top: 1px;
+    width: 4px; height: 9px;
+    border: solid var(--sheet);
+    border-width: 0 2px 2px 0;
+    transform: rotate(42deg);
+  }
+  .checklist input:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+  .checklist input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--rule-firm); }
+
+  .checkbar {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .checkbar button {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid var(--rule-firm);
+    color: var(--ink-soft);
+    padding: 4px 10px;
+    cursor: pointer;
+  }
+  .checkbar button:hover { border-color: var(--signal); color: var(--signal); }
+  .checkbar button:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+  /* ---------- screenshot plate (empty slot) ---------- */
+
+  .slot {
+    border: 1.5px dashed var(--rule-firm);
+    background: var(--plate);
+    padding: 26px;
+    margin: 20px 0;
+    text-align: center;
+  }
+  .slot .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sheet);
+    background: var(--ink-soft);
+    padding: 3px 9px;
+    margin-bottom: 12px;
+  }
+  .slot .what { font-family: var(--sans); font-size: 15px; font-weight: 600; margin: 0 0 6px; }
+  .slot .how { font-size: 13.5px; color: var(--ink-soft); margin: 0 auto; max-width: 60ch; }
+
+  /* ---------- prompt block ---------- */
+
+  .prompt {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.75;
+    background: var(--plate);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--signal);
+    padding: 20px 22px;
+    margin: 16px 0;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+
+  pre.tree {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    background: var(--plate);
+    border: 1px solid var(--rule);
+    padding: 18px 20px;
+    margin: 0;
+    overflow-x: auto;
+  }
+  pre.tree .gone { color: var(--ochre); font-weight: 700; }
+  pre.tree .new  { color: var(--signal); font-weight: 700; }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 18px 0;
+  }
+  @media (max-width: 760px) { .compare { grid-template-columns: 1fr; } }
+
+  /* ---------- stage cards ---------- */
+
+  .stages { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+  .stage {
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--signal);
+    padding: 16px 20px;
+    background: var(--sheet);
+  }
+  .stage h3 { margin: 0 0 10px; font-size: 15.5px; }
+  .stage h3 .n { font-family: var(--mono); color: var(--signal); margin-right: 8px; }
+  .stage dl { margin: 0; display: grid; grid-template-columns: 88px 1fr; gap: 5px 14px; font-size: 14.5px; }
+  .stage dt {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 4px;
+  }
+  .stage dd { margin: 0; }
+  @media (max-width: 640px) { .stage dl { grid-template-columns: 1fr; gap: 2px; } .stage dd { margin-bottom: 8px; } }
+
+  /* ---------- file cards ---------- */
+
+  .filecards { display: flex; flex-direction: column; gap: 12px; }
+  .filecard { border: 1px solid var(--rule); padding: 14px 18px; background: var(--sheet); }
+  .filecard .fname {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--signal);
+    margin: 0 0 5px;
+  }
+  .filecard p { margin: 0; font-size: 14.5px; max-width: 72ch; }
+  .filecard ol { margin: 8px 0 0; padding-left: 20px; font-size: 14px; }
+  .filecard ol li { margin-bottom: 3px; }
+
+  /* ---------- tables ---------- */
+
+  .scroller { overflow-x: auto; margin: 16px 0; border: 1px solid var(--rule); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { padding: 7px 11px; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  thead th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    background: var(--plate);
+    position: sticky;
+    top: 0;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  td.name { font-family: var(--mono); font-size: 12.5px; font-weight: 500; }
+  tr.win td { background: var(--signal-dim); }
+  tr.win td.name { color: var(--signal); font-weight: 700; }
+  tr.out td { color: var(--muted); }
+  .pill {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border: 1px solid currentColor;
+  }
+  .pill.yes { color: var(--signal); }
+  .pill.no  { color: var(--ochre); }
+
+  table.wrap td, table.wrap th { white-space: normal; }
+  table.map td:first-child { font-family: var(--mono); font-size: 12.5px; color: var(--signal); white-space: nowrap; }
+  table.map td:last-child { white-space: normal; }
+
+  /* ---------- step chart ---------- */
+
+  .chart { margin: 20px 0; overflow-x: auto; }
+  .chart svg { display: block; min-width: 620px; width: 100%; height: auto; }
+  .ax    { stroke: var(--rule-firm); stroke-width: 1; }
+  .grid  { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 4; }
+  .step  { stroke: var(--signal); stroke-width: 2.5; fill: none; stroke-linejoin: round; }
+  .stepnone { stroke: var(--ochre); }
+  .dot   { fill: var(--signal); }
+  .lbl   { font-family: var(--mono); font-size: 11px; fill: var(--ink-soft); }
+  .lbl.m { fill: var(--muted); font-size: 10px; }
+  .lbl.k { fill: var(--signal); font-weight: 700; }
+  .lbl.o { fill: var(--ochre); }
+  .mark  { stroke: var(--ochre); stroke-width: 1.5; stroke-dasharray: 4 3; }
+
+  /* ---------- misc ---------- */
+
+  ul.tight { margin: 10px 0; padding-left: 20px; }
+  ul.tight li { margin-bottom: 7px; max-width: 68ch; }
+
+  footer.end {
+    max-width: 940px;
+    margin: 40px auto 0;
+    padding-top: 18px;
+    border-top: 2px solid var(--ink);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .contents { display: none; }
+    .sheet { page-break-after: always; border: none; margin: 0; padding: 30px 0; max-width: none; }
+    figure, .slot, .scroller { break-inside: avoid; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+
+  @media (max-width: 620px) {
+    body { padding: 24px 14px 60px; }
+    .sheet { padding: 30px 22px 36px; }
+    .sheet-head { flex-direction: column; gap: 6px; }
+  }
+</style>
+
+<header class="masthead">
+  <div>
+    <h1>Hotel Base-Camp Comparator</h1>
+    <p class="sub">AI-Assisted Coding Interview · Build Dossier · SPR26_D2_P03</p>
+    <span class="cand">Candidate CC083</span>
+  </div>
+  <div class="meta">
+    React 19 · Vite · Vitest<br>
+    <b>126 tests</b> across 4 files<br>
+    10 hotels · 15 places · 150-cell matrix
+  </div>
+</header>
+
+<nav class="contents" aria-label="Contents">
+  <a href="#p1"><span>01</span> &nbsp;The Problem</a>
+  <a href="#p2"><span>02</span> &nbsp;Requirements</a>
+  <a href="#p3"><span>03</span> &nbsp;First Prompt</a>
+  <a href="#p4"><span>04</span> &nbsp;Implementation Plan</a>
+  <a href="#p5"><span>05</span> &nbsp;Architecture</a>
+  <a href="#p6"><span>06</span> &nbsp;Process Files</a>
+  <a href="#p7"><span>07</span> &nbsp;Dataset</a>
+  <a href="#p8"><span>08</span> &nbsp;File-by-File Build</a>
+  <a href="#p9"><span>09</span> &nbsp;Working Solution</a>
+  <a href="#p10"><span>10</span> &nbsp;Budget Timeline</a>
+</nav>
+
+<!-- ============================== 01 ============================== -->
+<section class="sheet" id="p1">
+  <div class="sheet-head">
+    <div class="plate-no">01</div>
+    <div class="titles">
+      <p class="eyebrow">Problem understanding</p>
+      <h2>Which hotel do you actually book?</h2>
+    </div>
+  </div>
+
+  <p class="lede">Imagine you and a group of friends are finally taking the city trip that has lived in the group chat for months. Everyone has already agreed on the wishlist — a famous landmark, a museum, a night market, a riverside walk, a few food spots nobody wants to miss.</p>
+
+  <p>There is one argument left. A cheap hotel might leave you crossing the whole city every single day. A hotel right next to the most popular spot might eat the entire budget. And phrases like <em>"centrally located"</em> settle nothing, because they compare nothing.</p>
+
+  <h3>What this tool does</h3>
+  <p>You give it one budget for the complete stay, and you say how much each place on the wishlist actually matters to your group, from 1 to 5. It then compares every hotel's whole-stay price against the known round-trip travel time to every single place — and recommends the most accessible hotel you can actually afford.</p>
+
+  <blockquote>
+    <p><strong>A worked example, straight from the problem statement.</strong> Suppose <code>CLOCK</code> matters 3 and <code>MARKET</code> matters 2. A hotel with round trips of 20 and 40 minutes scores <code>(3 × 20) + (2 × 40) = 140</code> importance-minutes, a weighted average of <code>140 / 5 = 28.0</code> minutes. Lower is better. A hotel is only in the running when its complete-stay cost is at or below the budget.</p>
+  </blockquote>
+
+  <p>The weighting is the whole point: a medium trip to somewhere the group is excited about outweighs a short hop to somewhere nobody cares about. And because every number is shown on screen, nobody has to take the answer on trust — the working is visible, place by place.</p>
+
+  <h3>What it deliberately is not</h3>
+  <p class="note">Not an itinerary planner. It does not choose places, arrange days, find routes, or estimate meals, tickets or transport. It answers exactly one question — <em>where should we base ourselves</em> — and it answers it with arithmetic rather than adjectives.</p>
+</section>
+
+<!-- ============================== 02 ============================== -->
+<section class="sheet" id="p2">
+  <div class="sheet-head">
+    <div class="plate-no">02</div>
+    <div class="titles">
+      <p class="eyebrow">Requirements · copied from the problem statement</p>
+      <h2>What the build had to satisfy</h2>
+    </div>
+  </div>
+
+  <p class="note">Every item below is lifted from <code>Student_SPR26_D2_P03-hotel-base-camp-comparator.md</code>, grouped under the same headings the specification itself uses. Boxes start unchecked and get ticked as the following plates demonstrate each one. <strong>Click any box to tick it live.</strong></p>
+
+  <div class="checkgroup">
+    <h4>Story conditions the main scenario must satisfy</h4>
+    <ul class="checklist">
+      <li><label><input type="checkbox"><span>4 through 7 hotels affordable at the initial budget</span></label></li>
+      <li><label><input type="checkbox"><span>The hotel with the unique lowest accessibility total is over budget</span></label></li>
+      <li><label><input type="checkbox"><span>The recommended affordable hotel is not the cheapest affordable hotel</span></label></li>
+      <li><label><input type="checkbox"><span>At least one affordable hotel has every round trip at or below 90 minutes, while another has at least one above 90</span></label></li>
+      <li><label><input type="checkbox"><span>Raising the budget to the cost of the most accessible hotel makes it the recommendation</span></label></li>
+      <li><label><input type="checkbox"><span>One place's importance, changed within 1–5, flips the recommended affordable hotel</span></label></li>
+    </ul>
+  </div>
+
+  <div class="checkgroup">
+    <h4>City and trip data</h4>
+    <ul class="checklist">
+      <li><label><input type="checkbox"><span>One currency used consistently; budget is a whole number from 0 to 1,000,000 for the complete stay</span></label></li>
+      <li><label><input type="checkbox"><span>Engine supports 2–10 hotels and 3–15 places; the main demonstration uses exactly 10 and 15</span></label></li>
+      <li><label><input type="checkbox"><span>Hotel and place IDs unique across the whole scenario, matching <code>[A-Z][A-Z0-9_-]{0,15}</code>; display names non-empty after trimming</span></label></li>
+      <li><label><input type="checkbox"><span>Each place is <code>attraction</code> or <code>food</code> with importance 1–5; at least three of each type and three distinct importance values</span></label></li>
+      <li><label><input type="checkbox"><span>Each hotel has a whole-number <code>stay_cost</code> from 1 to 1,000,000</span></label></li>
+      <li><label><input type="checkbox"><span>Each hotel has a complete <code>round_trip_minutes</code> map (1–600) covering every place; missing and unknown IDs are invalid</span></label></li>
+      <li><label><input type="checkbox"><span>Marker positions are presentation data only — pixel distance never influences any result</span></label></li>
+    </ul>
+  </div>
+
+  <div class="checkbar">
+    <span id="tally">0 of 13 ticked</span>
+    <span><button type="button" id="clearall">Reset all</button></span>
+  </div>
+</section>
+
+<!-- ============================== 03 ============================== -->
+<section class="sheet" id="p3">
+  <div class="sheet-head">
+    <div class="plate-no">03</div>
+    <div class="titles">
+      <p class="eyebrow">AI interaction · problem understanding</p>
+      <h2>The prompt that came before any code</h2>
+    </div>
+  </div>
+
+  <p>The first move was not to ask for a solution. It was to force a complete, literal read of the problem statement — with the Student Guide loaded as the grading rubric, so every recommendation that followed had to respect simplicity, familiarity and a one-day scope.</p>
+
+  <div class="prompt">You are an expert software engineer, project planner, and AI-assisted development mentor.
+Before answering anything, do this in order:
+
+  1. Read the attached problem statement file(s) completely, start to finish.
+  2. Read STUDENT_GUIDE.md completely, and treat it as the grading rubric for
+     everything you say next — every recommendation must respect its emphasis
+     on simplicity, familiarity, finishing within one prep day, and avoiding
+     over-engineering.
+
+Then, for each problem, explain it to me in very easy, plain English,
+using this exact structure:
+
+  1. WHAT IT'S ASKING — one short paragraph on what I'm actually being asked
+     to build, plus one small concrete worked example so I can see the idea
+     in action, not just read about it.
+
+  2. EVERY CONDITION, LINE BY LINE — go through the problem statement's
+     contracts and acceptance criteria one at a time and explain each one
+     in plain language. Do not summarize, skip, or water down any
+     requirement — especially exact numeric rules, tie-breaking rules,
+     rounding rules, validation/error rules, and required test cases. If a
+     rule is oddly specific, call out exactly why it matters.
+
+  3. WHAT THE UI MUST DO — list every required screen element (map, table,
+     list, cards, panels) and every required interaction (buttons, editable
+     fields, select/inspect actions) separately. Mark clearly which parts
+     are required and which are optional.
+
+  4. TECH STACK — recommend specific tools (or "none needed") for this
+     problem, with one line of reasoning per choice, favoring the simplest,
+     most familiar option that still satisfies every requirement above.
+
+  5. ARCHITECTURE AND PLAN — describe how to split the code (for example,
+     a pure calculation engine kept separate from the UI layer, and why),
+     then give an ordered list of implementation stages/checkpoints to
+     follow, stating what "done" looks like at each checkpoint.
+
+Do not start writing code. Do not skip ahead. If anything in the problem
+statement is ambiguous, say so explicitly instead of silently picking an
+interpretation.</div>
+
+  <h3>Why it is shaped like that</h3>
+  <ul class="tight">
+    <li><strong>Rubric before answer.</strong> Loading <code>STUDENT_GUIDE.md</code> first meant every later suggestion was already filtered through the constraints it would be judged against.</li>
+    <li><strong>"Do not summarize" is doing real work.</strong> The specification's value is in its exact numeric rules — tie-breaks, rounding, validation. A summary would have quietly dropped precisely the parts most likely to be tested.</li>
+    <li><strong>No code yet.</strong> Explicitly forbidding implementation kept the first exchange about understanding, which is where a wrong assumption is cheapest to fix.</li>
+    <li><strong>Ambiguity surfaced, not resolved silently.</strong> The last line exists so that any guess would arrive labelled as a guess.</li>
+  </ul>
+
+  <h3>What came back — and what was overridden</h3>
+
+  <figure>
+    <img data-shot="compare" alt="A comparison table scoring all four interview problems — P01 Bridges, P02 K-Means, P03 Hotels, P04 Reorg — across ten dimensions including build hours, algorithm risk, rounding traps, oracle burden, rendering difficulty, demo data design, live-modification safety and over-engineering pressure. The stated ranking is P04, then P02, then P03, then P01, with P04 named the winner.">
+    <figcaption><span class="shotno">Figure 3.1</span>The four problems scored across ten dimensions — build hours, algorithm risk, rounding traps, oracle burden, rendering difficulty, demo-data design, explainability, live-modification safety and over-engineering pressure. The verdict was explicit: <strong>P04 &gt; P02 &gt; P03 &gt; P01</strong>, with this problem — P03 — placed third, and P04 named the winner.</figcaption>
+  </figure>
+
+  <p><strong>The analysis was accepted. The recommendation was not.</strong> P03 was chosen despite being ranked third, which makes the two objections in that table worth reading carefully, because they are specific rather than vague: the demo data would need a <em>constraint search</em> rather than straightforward authoring, and the independent oracle would have to cover <em>150 cells</em> instead of P04's twelve rows.</p>
+
+  <div class="flag">
+    <p><strong>Both flagged risks were real, and both were paid rather than dodged.</strong> The constraint-search problem is plate 07 — a brute-force generator that found a conforming dataset in 5,754 attempts after a first run failed 200,000 times. The 150-cell oracle burden is the recorded expected-results table in <code>tests/demoCity.test.js</code>, which re-derives every hotel's figures with separate arithmetic. Each objection in that table has a plate of its own in this dossier rather than a sentence, because each one turned out to cost roughly what it was predicted to cost.</p>
+  </div>
+
+</section>
+
+<!-- ============================== 04 ============================== -->
+<section class="sheet" id="p4">
+  <div class="sheet-head">
+    <div class="plate-no">04</div>
+    <div class="titles">
+      <p class="eyebrow">Deliverable 1 · implementation plan</p>
+      <h2>Five stages, each with a checkpoint that can fail</h2>
+    </div>
+  </div>
+
+  <p>Written into <code>IMPLEMENTATION_PLAN.md</code> before a single line of project code. The ordering rule was deliberate: all pure calculation is built and proven before any UI exists, so the UI is only ever a rendering layer over logic that is already known to be correct. A stage only begins once the previous checkpoint is genuinely met — not merely written.</p>
+
+  <div class="stages">
+    <div class="stage">
+      <h3><span class="n">01</span>Data + Validation</h3>
+      <dl>
+        <dt>Build</dt><dd><code>src/data/demoCity.js</code> — the verified dataset — and <code>src/engine/validate.js</code>, checking IDs, names, types, importance, stay costs, budget range and the completeness of every hotel-to-place travel map.</dd>
+        <dt>Depends on</dt><dd>Nothing. This is the starting point.</dd>
+        <dt>Verify</dt><dd>A test file where the full real scenario passes cleanly, <em>and</em> at least two deliberately broken scenarios are each rejected naming the correct field — a duplicate hotel ID, and a hotel missing one place's travel time.</dd>
+      </dl>
+    </div>
+
+    <div class="stage">
+      <h3><span class="n">02</span>Ranking engine + independent verification</h3>
+      <dl>
+        <dt>Build</dt><dd><code>src/engine/ranking.js</code> — contribution, weighted travel total, round-half-up display average, affordability, the three-level tie-break, rank assignment, and the <code>NO_AFFORDABLE_HOTEL</code> case.</dd>
+        <dt>Depends on</dt><dd>Stage 1's validated data shape. The engine assumes its input has already passed validation, so it never second-guesses its own arguments.</dd>
+        <dt>Verify</dt><dd>Two-part proof. First, a test reproducing the specification's own worked example exactly. Second, at least three hotels from the real dataset verified by hand or spreadsheet, and the engine's output confirmed to match, before any of the dataset's documented story conditions are trusted.</dd>
+      </dl>
+    </div>
+
+    <div class="stage">
+      <h3><span class="n">03</span>State layer — plain <code>useState</code>, no submit button</h3>
+      <dl>
+        <dt>Build</dt><dd><code>src/engine/computeComparison.js</code>, one function composing validate then rank. Exactly three pieces of state — <code>budgetText</code>, <code>importanceText</code>, <code>selectedHotelId</code> — live directly in <code>App.jsx</code>. The city itself stays a module constant and is never state, which is precisely what makes Reset a matter of restoring three values and nothing else.</dd>
+        <dt>Depends on</dt><dd>Stage 2 already tested. This stage composes existing functions and adds no new arithmetic of its own.</dd>
+        <dt>Verify</dt><dd>Before any visible UI exists: call <code>computeComparison</code> directly. Change the budget, confirm the ranking moves. Change one importance, confirm it moves. Call it again with the original values and confirm it matches the documented starting state exactly.</dd>
+      </dl>
+    </div>
+
+    <div class="stage">
+      <h3><span class="n">04</span>UI layer</h3>
+      <dl>
+        <dt>Build</dt><dd><code>CityMap.jsx</code>, <code>RankedList.jsx</code>, <code>HotelDetail.jsx</code> and <code>Controls.jsx</code> — every one reading from the state above and storing nothing of its own.</dd>
+        <dt>Depends on</dt><dd>Stage 3 proven correct. The UI is a pure rendering layer on top of it.</dd>
+        <dt>Verify</dt><dd>A manual browser walkthrough of the entire documented story: load, inspect a hotel and check its 15 links, cross the budget boundary and watch the recommendation change, edit the documented importance and watch it flip again, then Reset and confirm an exact return to the start.</dd>
+      </dl>
+    </div>
+
+    <div class="stage">
+      <h3><span class="n">05</span>Full test sweep + live-modification rehearsal</h3>
+      <dl>
+        <dt>Build</dt><dd>The remaining required tests — both tie-breaks, budget equality, <code>NO_AFFORDABLE_HOTEL</code>, every validation category, edit-then-reset — plus running instructions and a rehearsal of plausible live-modification requests.</dd>
+        <dt>Depends on</dt><dd>Stages 1–4 complete and individually checkpointed. This stage is verification and rehearsal, not new features.</dd>
+        <dt>Verify</dt><dd>The full suite passes from a clean install; a cold <code>npm run dev</code> reaches a working demo in well under a minute; each rehearsed modification finishes inside the interview's ten-minute budget.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 05 ============================== -->
+<section class="sheet" id="p5">
+  <div class="sheet-head">
+    <div class="plate-no">05</div>
+    <div class="titles">
+      <p class="eyebrow">Deliverable 4 · design summary</p>
+      <h2>Architecture: the correction that mattered</h2>
+    </div>
+  </div>
+
+  <p>The first architecture was close, but it put the composition logic — validate, then rank, on every change — inside a React hook. That single placement decision made the core calculation untestable without rendering React. The prompt below fixed it.</p>
+
+  <div class="compare">
+    <div>
+      <h4>Before</h4>
+      <pre class="tree">src/
+  engine/
+    validate.js
+    ranking.js
+  data/
+    demoCity.js
+  <span class="gone">hooks/
+    useComparator.js</span>   <span class="gone">&lt;- state + recompute
+                        trapped inside React</span>
+  ui/
+    App.jsx          wires the hook to
+                     the components
+    CityMap.jsx
+    RankedList.jsx
+    HotelDetail.jsx
+    Controls.jsx
+tests/
+  validate.test.js
+  ranking.test.js
+  <span class="gone">useComparator.test.js</span></pre>
+    </div>
+    <div>
+      <h4>After</h4>
+      <pre class="tree">src/
+  engine/
+    validate.js
+    ranking.js
+    <span class="new">computeComparison.js</span>  <span class="new">&lt;- plain
+                        function, no React</span>
+  data/
+    demoCity.js
+
+  ui/
+    App.jsx          owns state via
+                     useState, calls
+                     computeComparison()
+    CityMap.jsx
+    RankedList.jsx
+    HotelDetail.jsx
+    Controls.jsx
+tests/
+  validate.test.js
+  ranking.test.js
+  <span class="new">computeComparison.test.js</span></pre>
+    </div>
+  </div>
+
+  <h3>The correcting prompt</h3>
+  <div class="prompt">I want the actual computation/math and validation logic to be completely
+separate from the React UI.
+
+The engine/ files should contain pure, reusable, unit-testable functions
+such as: validation, contribution calculation, weighted travel total,
+affordability, ranking, tie-breaking, rounding, final comparison
+calculation. The UI should only manage state, collect inputs, call the
+engine functions, and display their results.
+
+For example, the core calculation should be directly testable with
+something like:
+
+    computeComparison(scenario, 1500, {})
+
+from Vitest, without rendering React components or using React Testing
+Library.
+
+Review the architecture and tell me whether ranking.js is enough or
+whether we should introduce another engine file such as comparison.js.
+Keep the architecture simple and avoid unnecessary files.</div>
+
+  <h3>What actually changed, and why it is the right fix</h3>
+  <ul class="tight">
+    <li><strong>The hook was removed entirely.</strong> A hook only runs inside a rendering component — which directly contradicts the requirement in the prompt itself: testable <em>without</em> rendering React. You cannot call a hook the way you call <code>computeComparison(scenario, 1500, {})</code>.</li>
+    <li><strong><code>computeComparison.js</code> was added</strong> as a plain function taking over the hook's composition role. Same logic, zero React dependency — which answers the prompt's own question: one engine file was not enough, and this is the second one.</li>
+    <li><strong><code>App.jsx</code> changed jobs</strong> from wiring a hook to owning state directly and calling the engine each render. State stayed a React concern; arithmetic moved fully out of React.</li>
+    <li><strong>The test file changed with it.</strong> <code>useComparator.test.js</code> would have needed hook-testing tooling. <code>computeComparison.test.js</code> needs nothing but plain function calls.</li>
+  </ul>
+
+  <blockquote>
+    <p>The project's own written record confirms this was a reasoned trade-off rather than an accident: <em>"A custom <code>useComparator</code> hook wrapping the state — considered and dropped. The only justification for extracting a hook is reuse across multiple components, and there's exactly one consumer (<code>App.jsx</code>) here… the isolated-testability it offered comes just as well from <code>computeComparison()</code> being a plain function."</em></p>
+    <cite>ARCHITECTURE.md — Alternatives considered and rejected</cite>
+  </blockquote>
+
+  <p class="note"><strong>The one rule everything else follows:</strong> <code>engine/</code> never imports React. <code>App.jsx</code> never contains calculation logic — only <code>useState</code> and JSX.</p>
+</section>
+
+<!-- ============================== 06 ============================== -->
+<section class="sheet" id="p6">
+  <div class="sheet-head">
+    <div class="plate-no">06</div>
+    <div class="titles">
+      <p class="eyebrow">Process · how the build was actually run</p>
+      <h2>Five files that governed the work</h2>
+    </div>
+  </div>
+
+  <p>The project was not improvised into existence. Before and during the build, five plain Markdown files sat in the project root and constrained what happened next.</p>
+
+  <div class="figpair">
+    <figure>
+      <img data-shot="tree" alt="VS Code file explorer showing the CISCOPROB project: a project folder containing dist, node_modules, src, tests, tools and config files, with ARCHITECTURE.md, FINAL_DELIVERABLE.md, GOALS.md, IMPLEMENTATION_PLAN.md, POINTS_TO_REMEMBER.md, RULES.md and STUDENT_GUIDE.md at the root alongside the four problem statements.">
+      <figcaption><span class="shotno">Figure 6.1</span>The project root. Application code is sealed inside <code>project/</code>; the governing documents sit beside it at the top level, where they were read and updated throughout the build rather than written up afterwards.</figcaption>
+    </figure>
+    <figure>
+      <img data-shot="goals" alt="GOALS.md open in the editor showing checked boxes against Design before coding, Use iterative prompting, Verify and understand, Test continuously, Track plan changes and Document your process, plus all four Implementation Plan items ticked.">
+      <figcaption><span class="shotno">Figure 6.2</span><code>GOALS.md</code> mid-build. Each <code>[x]</code> was only added once evidence existed for it — visible here across the approach items and all four Implementation Plan deliverables, with the rest of the file still open.</figcaption>
+    </figure>
+  </div>
+
+  <div class="filecards">
+    <div class="filecard">
+      <p class="fname">RULES.md</p>
+      <p>The rules the assistant had to follow before answering anything, for the rest of the build:</p>
+      <ol>
+        <li>Never change <code>GOALS.md</code> or <code>POINTS_TO_REMEMBER.md</code> unless explicitly told to — reading, quoting and suggesting are fine; editing on its own initiative is not.</li>
+        <li>Flag a testing opportunity out loud rather than silently adding a test or silently skipping one.</li>
+        <li>File-by-file build process: show a file's full content, explain it in very easy English, and wait for questions. Write it only once told to, and commit only when told <em>"commit this file as final."</em></li>
+      </ol>
+    </div>
+
+    <div class="filecard">
+      <p class="fname">POINTS_TO_REMEMBER.md</p>
+      <p>The running build log — what was being considered, decided or ruled out at each point. Entries were added only when explicitly asked for, which makes it a genuine first-person record of the thinking rather than a machine-generated summary written after the fact. Plate 08 shows it mid-build.</p>
+    </div>
+
+    <div class="filecard">
+      <p class="fname">IMPLEMENTATION_PLAN.md</p>
+      <p>The five-stage plan on plate 04, written before any project code, so the order of work — data, validation, ranking, state, UI, tests — was a decision rather than an accident.</p>
+    </div>
+
+    <div class="filecard">
+      <p class="fname">GOALS.md</p>
+      <p>The full requirement checklist copied from <code>STUDENT_GUIDE.md</code>, tracked line by line throughout with <code>[ ]</code> not started, <code>[~]</code> in progress and <code>[x]</code> completed — and a goal was only ever marked complete once there was real evidence for it, not merely because the relevant code existed.</p>
+    </div>
+
+    <div class="filecard">
+      <p class="fname">ARCHITECTURE.md</p>
+      <p>The reference every new file had to match. Combined with the file-by-file rule above, this meant nothing entered the project that contradicted the agreed folder structure, the engine-never-imports-React rule, or the recorded tech-stack reasoning.</p>
+    </div>
+  </div>
+
+  <h3>Why not Obsidian?</h3>
+  <ul class="tight">
+    <li><strong>Zero context switching.</strong> Plain files in the project folder could be read, quoted and updated in the same conversation that wrote the code — no second application, no vault to keep in sync, no copying between two tools during a time-boxed build.</li>
+    <li><strong>The complexity was not needed.</strong> Obsidian's real strengths — bidirectional links, graph view, plugins — serve a large sprawling knowledge base. This project needed five small flat files. Adding a second tool for that is exactly the "unnecessary complexity merely for the sake of using more technologies" the Student Guide warns against.</li>
+    <li><strong>Documentation travelled with the code.</strong> Same folder, same repository, same visibility to anyone opening the project — as Figure 6.1 shows. A vault living elsewhere is one more place to remember to check.</li>
+  </ul>
+  <p class="note">The tool was matched to the actual size of the problem — the same principle that chose the tech stack on plate 05.</p>
+</section>
+
+<!-- ============================== 07 ============================== -->
+<section class="sheet" id="p7">
+  <div class="sheet-head">
+    <div class="plate-no">07</div>
+    <div class="titles">
+      <p class="eyebrow">Deliverable 3 · problem solving</p>
+      <h2>Building the dataset: stop guessing, start searching</h2>
+    </div>
+  </div>
+
+  <p>The specification demands a 10-hotel, 15-place city whose roughly 175 numbers satisfy six story conditions <em>simultaneously</em>. The first approach was to ask for that dataset directly. It did not work, and the reason is worth stating precisely.</p>
+
+  <h3>Why asking for the numbers failed</h3>
+  <p>Condition 2 alone — <em>the single most accessible hotel overall must be unique, and must be the one just outside the budget</em> — requires comparing every hotel's weighted total against every other hotel's. That is not a judgement that can be made by inspection while also holding five other conditions true. The datasets that came back looked plausible and quietly broke one condition or another almost every time.</p>
+
+  <h3>The fix: generate candidates, verify in code</h3>
+  <p>The next prompt asked for a <strong>script</strong> instead of a dataset — one that generates random candidate numbers and <em>checks</em> all six conditions in code, discarding anything that fails and retrying until a candidate passes all six at once. This changes the assistant's job from "guess correct numbers", which is unreliable, to "write correct checking logic", which is verifiable. The numbers themselves then come from brute-force search.</p>
+
+  <figure>
+    <img data-shot="generator" alt="The evaluate function from generate-demo-data.js, showing the weightedTravelTotal helper and a docstring reading: check one candidate against all six conditions, returns the winning details or null if the candidate fails any of them, followed by the condition 2 uniqueness check.">
+    <figcaption><span class="shotno">Figure 7.1</span><code>evaluate()</code> — the heart of the generator. The docstring states the contract exactly: <em>check one candidate against all six conditions, return the winning details or <code>null</code></em>. Each condition is then tested in its own labelled block; condition 2's uniqueness test is visible at the bottom of the frame.</figcaption>
+  </figure>
+
+  <blockquote>
+    <p><strong>The debugging story worth telling.</strong> The first run used wide ranges — stay costs 2,000–9,000, travel times 5–180 — and found nothing in 200,000 attempts. The reason is recorded in the script itself: condition 6 needs one place's importance change to flip the winner, and a single place can only shift a hotel's total by at most four times its travel time. With times reaching 180, the totals were spread too far apart for any single place to bridge the gap between the top two hotels. Narrowing to costs 3,000–7,000 and times 10–140 made near-ties common — and a valid dataset appeared in <strong>5,754 attempts, in 0.1 seconds</strong>.</p>
+  </blockquote>
+
+  <p class="note"><strong>Boundary worth stating out loud:</strong> this is a build-time tool. The application never runs it and never randomises anything — the winning output was pasted into <code>src/data/demoCity.js</code> as fixed constants, so the identical city materialises on every load and every reset. And the script checking its own output is <em>not</em> the independent verification the specification requires; that is done separately, in <code>tests/demoCity.test.js</code>, which re-derives every value with its own arithmetic.</p>
+
+  <h3>Table A — the dataset as verified by hand</h3>
+  <p class="note">Place importance shown in each column header. Multiply importance by minutes across a row and sum to get that hotel's weighted travel total.</p>
+
+  <div class="scroller">
+    <table>
+      <thead>
+        <tr>
+          <th>Hotel</th>
+          <th class="num">CLOCK<br>(4)</th><th class="num">BAKERY<br>(2)</th><th class="num">MUSEUM<br>(3)</th>
+          <th class="num">SAFFRON<br>(3)</th><th class="num">GARDENS<br>(4)</th><th class="num">NIGHT<br>(5)</th>
+          <th class="num">LIGHT<br>(3)</th><th class="num">KETTLE<br>(4)</th><th class="num">TOY<br>(1)</th>
+          <th class="num">GRILL<br>(4)</th><th class="num">RIVER<br>(5)</th><th class="num">CHOWD<br>(1)</th>
+          <th class="num">GALLERY<br>(2)</th><th class="num">EMBER<br>(5)</th><th class="num">OBSERV<br>(3)</th>
+          <th class="num">Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="name">GILDED_ANCHOR</td><td class="num">32</td><td class="num">140</td><td class="num">91</td><td class="num">100</td><td class="num">138</td><td class="num">98</td><td class="num">133</td><td class="num">48</td><td class="num">85</td><td class="num">94</td><td class="num">125</td><td class="num">37</td><td class="num">68</td><td class="num">10</td><td class="num">121</td><td class="num">5,431</td></tr>
+        <tr class="win"><td class="name">LANTERN_COURT</td><td class="num">70</td><td class="num">38</td><td class="num">68</td><td class="num">39</td><td class="num">13</td><td class="num">75</td><td class="num">23</td><td class="num">79</td><td class="num">46</td><td class="num">80</td><td class="num">74</td><td class="num">25</td><td class="num">37</td><td class="num">79</td><td class="num">34</td><td class="num">3,190</td></tr>
+        <tr><td class="name">DOCKSIDE</td><td class="num">84</td><td class="num">118</td><td class="num">103</td><td class="num">41</td><td class="num">107</td><td class="num">81</td><td class="num">33</td><td class="num">94</td><td class="num">76</td><td class="num">44</td><td class="num">46</td><td class="num">35</td><td class="num">58</td><td class="num">86</td><td class="num">104</td><td class="num">3,060</td></tr>
+        <tr><td class="name">MAPLE_VINE</td><td class="num">98</td><td class="num">122</td><td class="num">70</td><td class="num">120</td><td class="num">55</td><td class="num">58</td><td class="num">37</td><td class="num">125</td><td class="num">47</td><td class="num">55</td><td class="num">17</td><td class="num">74</td><td class="num">18</td><td class="num">121</td><td class="num">101</td><td class="num">3,808</td></tr>
+        <tr><td class="name">RIDGEVIEW</td><td class="num">88</td><td class="num">74</td><td class="num">55</td><td class="num">114</td><td class="num">10</td><td class="num">70</td><td class="num">92</td><td class="num">29</td><td class="num">136</td><td class="num">59</td><td class="num">138</td><td class="num">123</td><td class="num">70</td><td class="num">41</td><td class="num">60</td><td class="num">5,931</td></tr>
+        <tr><td class="name">COPPERLINE</td><td class="num">46</td><td class="num">22</td><td class="num">37</td><td class="num">21</td><td class="num">89</td><td class="num">58</td><td class="num">66</td><td class="num">24</td><td class="num">81</td><td class="num">104</td><td class="num">67</td><td class="num">95</td><td class="num">86</td><td class="num">22</td><td class="num">136</td><td class="num">4,497</td></tr>
+        <tr><td class="name">SALTWIND</td><td class="num">77</td><td class="num">48</td><td class="num">18</td><td class="num">54</td><td class="num">101</td><td class="num">98</td><td class="num">11</td><td class="num">64</td><td class="num">109</td><td class="num">68</td><td class="num">43</td><td class="num">12</td><td class="num">30</td><td class="num">99</td><td class="num">13</td><td class="num">3,491</td></tr>
+        <tr><td class="name">MERIDIAN</td><td class="num">56</td><td class="num">47</td><td class="num">116</td><td class="num">69</td><td class="num">75</td><td class="num">41</td><td class="num">72</td><td class="num">64</td><td class="num">41</td><td class="num">12</td><td class="num">59</td><td class="num">58</td><td class="num">39</td><td class="num">59</td><td class="num">50</td><td class="num">6,790</td></tr>
+        <tr><td class="name">FOXGLOVE</td><td class="num">115</td><td class="num">129</td><td class="num">62</td><td class="num">48</td><td class="num">11</td><td class="num">61</td><td class="num">26</td><td class="num">93</td><td class="num">54</td><td class="num">70</td><td class="num">76</td><td class="num">90</td><td class="num">139</td><td class="num">79</td><td class="num">126</td><td class="num">3,795</td></tr>
+        <tr><td class="name">HARBOUR_GATE</td><td class="num">61</td><td class="num">82</td><td class="num">94</td><td class="num">17</td><td class="num">21</td><td class="num">81</td><td class="num">99</td><td class="num">132</td><td class="num">47</td><td class="num">131</td><td class="num">111</td><td class="num">28</td><td class="num">131</td><td class="num">25</td><td class="num">87</td><td class="num">4,730</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="note">Importance total = 4+2+3+3+4+5+3+4+1+4+5+1+2+5+3 = <strong>49</strong>.</p>
+
+  <h3>Table B — the independently recorded result, at budget 4,730</h3>
+
+  <div class="scroller">
+    <table>
+      <thead>
+        <tr><th>Hotel</th><th class="num">Weighted total</th><th class="num">Average</th><th>Affordable</th><th class="num">Remaining / shortfall</th><th class="num">Rank</th></tr>
+      </thead>
+      <tbody>
+        <tr class="out"><td class="name">GILDED_ANCHOR</td><td class="num">4,286</td><td class="num">87.5</td><td><span class="pill no">over</span></td><td class="num">−701</td><td class="num">—</td></tr>
+        <tr class="win"><td class="name">LANTERN_COURT</td><td class="num">2,821</td><td class="num">57.6</td><td><span class="pill yes">yes</span></td><td class="num">1,540</td><td class="num">1 ★</td></tr>
+        <tr><td class="name">DOCKSIDE</td><td class="num">3,687</td><td class="num">75.2</td><td><span class="pill yes">yes</span></td><td class="num">1,670</td><td class="num">4</td></tr>
+        <tr><td class="name">MAPLE_VINE</td><td class="num">3,697</td><td class="num">75.4</td><td><span class="pill yes">yes</span></td><td class="num">922</td><td class="num">5</td></tr>
+        <tr class="out"><td class="name">RIDGEVIEW</td><td class="num">3,499</td><td class="num">71.4</td><td><span class="pill no">over</span></td><td class="num">−1,201</td><td class="num">—</td></tr>
+        <tr><td class="name">COPPERLINE</td><td class="num">2,959</td><td class="num">60.4</td><td><span class="pill yes">yes</span></td><td class="num">233</td><td class="num">2</td></tr>
+        <tr><td class="name">SALTWIND</td><td class="num">3,005</td><td class="num">61.3</td><td><span class="pill yes">yes</span></td><td class="num">1,239</td><td class="num">3</td></tr>
+        <tr class="out"><td class="name">MERIDIAN</td><td class="num">2,815</td><td class="num">57.4</td><td><span class="pill no">over</span></td><td class="num">−2,060</td><td class="num">—</td></tr>
+        <tr><td class="name">FOXGLOVE</td><td class="num">3,702</td><td class="num">75.6</td><td><span class="pill yes">yes</span></td><td class="num">935</td><td class="num">6</td></tr>
+        <tr><td class="name">HARBOUR_GATE</td><td class="num">3,857</td><td class="num">78.7</td><td><span class="pill yes">yes</span></td><td class="num">0</td><td class="num">7</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flag">
+    <p><strong>The story is visible right in the table.</strong> MERIDIAN holds the lowest weighted total of all ten hotels — 2,815, better than the winner's 2,821 — and is still unranked, because it costs 6,790 against a budget of 4,730. Meanwhile HARBOUR_GATE sits exactly on the budget with 0 remaining, which demonstrates that equality counts as affordable. Conditions 2, 3 and the budget-equality edge case are all satisfied by this single table.</p>
+  </div>
+
+  <p class="note"><strong>A by-hand spot check to say out loud:</strong> take LANTERN_COURT — (4×70)+(2×38)+(3×68)+(3×39)+(4×13)+(5×75)+(3×23)+(4×79)+(1×46)+(4×80)+(5×74)+(1×25)+(2×37)+(5×79)+(3×34) = <strong>2,821</strong>, matching Table B exactly. These same numbers are also recorded as constants in <code>tests/demoCity.test.js</code> and re-derived there by separate arithmetic, so the human check and the automated check agree.</p>
+</section>
+
+<!-- ============================== 08 ============================== -->
+<section class="sheet" id="p8">
+  <div class="sheet-head">
+    <div class="plate-no">08</div>
+    <div class="titles">
+      <p class="eyebrow">Process · verify and understand</p>
+      <h2>Built one file at a time, and understood before moving on</h2>
+    </div>
+  </div>
+
+  <p>No file was generated in bulk. Following <code>RULES.md</code>, each one was requested singly, shown in full, explained in plain English, and questioned before the next was written. Afterwards the whole codebase was walked again — engine, tests, then UI — using Claude Code's <strong>tech-learning-tutor</strong> skill, which maps a project into an ordered learning tree and teaches it branch by branch.</p>
+
+  <figure>
+    <img data-shot="buildlog" alt="POINTS_TO_REMEMBER.md open in the editor around lines 338 to 355, showing entries for ranking.js, computeComparison.js, a REORDER note about introducing computeComparison, then app.js, controls.js, rankedlist.js with a fix note, hotelDetail.js, cityMap.js and styles.css.">
+    <figcaption><span class="shotno">Figure 8.1</span>The build log, written as it happened. Files appear one at a time, each with a one-line description of its job — and two corrections are recorded in place rather than tidied away afterwards: <code>computeComparison.js</code> being introduced <em>because the app was calling <code>demoCity</code> and <code>validate</code> directly</em>, and <code>RankedList</code> being fixed after it showed only the winner instead of every hotel. The first of those is the same architectural decision plate 05 documents, captured here independently at the moment it was made.</figcaption>
+  </figure>
+
+  <h3>What every file does</h3>
+
+  <div class="scroller">
+    <table class="map wrap">
+      <thead><tr><th>File</th><th>Responsibility</th></tr></thead>
+      <tbody>
+        <tr><td>src/data/demoCity.js</td><td>The fixed dataset — 10 hotels, 15 places, the 150-cell travel-time matrix, the starting budget. Never changes at runtime.</td></tr>
+        <tr><td>src/engine/validate.js</td><td>Checks a scenario is well formed — IDs, names, types, ranges, a complete travel map — before any ranking is permitted to run.</td></tr>
+        <tr><td>src/engine/ranking.js</td><td>The arithmetic: contribution, weighted travel total, round-half-up display, affordability, tie-breaks, rank assignment, per-hotel breakdown.</td></tr>
+        <tr><td>src/engine/computeComparison.js</td><td>The single doorway between screen and maths — runs validate, then ranking, and returns one result object.</td></tr>
+        <tr><td>src/ui/App.jsx</td><td>Owns the three pieces of state, calls the engine fresh on every render, passes results down. Contains no calculation.</td></tr>
+        <tr><td>src/ui/Controls.jsx</td><td>The budget box and 15 importance boxes. Reports every keystroke upward exactly as typed and validates nothing itself.</td></tr>
+        <tr><td>src/ui/CityMap.jsx</td><td>The schematic SVG map — 25 markers always visible, 15 comparison links drawn only for the inspected hotel.</td></tr>
+        <tr><td>src/ui/RankedList.jsx</td><td>Ranked affordable hotels, plus over-budget hotels kept visible with their shortfall and no rank.</td></tr>
+        <tr><td>src/ui/HotelDetail.jsx</td><td>The per-place breakdown table — the working shown, line by line, adding up to the ranking score.</td></tr>
+        <tr><td>src/main.jsx</td><td>React entry point; mounts <code>App</code>.</td></tr>
+        <tr><td>src/styles.css</td><td>All visual styling.</td></tr>
+        <tr><td>tests/validate.test.js</td><td>Proves every category of bad input is rejected, for the right reason, in the documented order.</td></tr>
+        <tr><td>tests/ranking.test.js</td><td>Proves the arithmetic, rounding, tie-breaks and affordability rules — including that a rounded average can never decide the order.</td></tr>
+        <tr><td>tests/computeComparison.test.js</td><td>Drives the whole application the way a user would — typing, editing, erroring, resetting — with no rendering.</td></tr>
+        <tr><td>tests/demoCity.test.js</td><td>Re-derives every expected number with its own separate arithmetic and confirms the engine agrees; also checks all six story conditions.</td></tr>
+        <tr><td>tools/generate-demo-data.js</td><td>Build-time only, never imported by the app — the brute-force search that produced the verified dataset.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Test evidence — deliverable 5</h3>
+
+  <figure>
+    <img data-shot="tests" alt="Terminal output of npm test in the project folder: Vitest 4.1.11 reporting validate.test.js with 39 tests, ranking.test.js with 26, computeComparison.test.js with 23 and demoCity.test.js with 38, then 4 test files passed and 126 tests passed in 580 milliseconds.">
+    <figcaption><span class="shotno">Figure 8.2</span>One command, 126 tests, 580&nbsp;ms, nothing skipped. The distribution is deliberate rather than incidental: <strong>39</strong> in <code>validate.test.js</code> — roughly one per rejection category, plus the group pinning the fixed reporting order; <strong>26</strong> in <code>ranking.test.js</code> — the arithmetic, round-half-up, both tie-breaks and the affordability boundary; <strong>23</strong> in <code>computeComparison.test.js</code> — every action a user can take, driven as plain function calls with no rendering; and <strong>38</strong> in <code>demoCity.test.js</code> — the independent oracle and all six story conditions. Sub-second feedback is what makes the suite usable <em>during</em> a live modification rather than only at the end of one.</figcaption>
+  </figure>
+</section>
+
+<!-- ============================== 09 ============================== -->
+<section class="sheet" id="p9">
+  <div class="sheet-head">
+    <div class="plate-no">09</div>
+    <div class="titles">
+      <p class="eyebrow">Deliverable 2 · working solution</p>
+      <h2>The application, and the working shown</h2>
+    </div>
+  </div>
+
+  <p><strong>To run it:</strong> <code>cd project</code>, then <code>npm install</code>, then <code>npm run dev</code>. No backend, no database, no API keys, no network access — the city is compiled in as constants, so the identical scenario loads every time and Reset returns to it exactly.</p>
+
+  <figure>
+    <img data-shot="app" alt="The running application: budget field set to 4730, a grid of fifteen importance inputs, the Calderra schematic map with comparison links from The Gilded Anchor, and a ranked list showing Lantern Court Inn recommended at rank 1 through Harbour Gate Hotel at rank 7, with three hotels marked over budget.">
+    <figcaption><span class="shotno">Figure 9.1</span>The full workspace at the documented starting budget of 4,730. Every number here matches Table B on plate 07 exactly — Lantern Court Inn recommended with travel score 2,821 and 1,540 left, down to Harbour Gate Hotel at rank 7 with <strong>0 left</strong>, which is the budget-equality edge case visible in normal operation rather than only in a test. Three hotels sit under "Not ranked", each showing how far over budget it is instead of being hidden.</figcaption>
+  </figure>
+
+  <figure>
+    <img data-shot="detail" alt="The lower half of the application: The Ridgeview and The Meridian shown as over budget, and the breakdown panel for The Gilded Anchor with whole-stay price 5431, travel score 4286, weighted average 87.5 minutes, position blank, and a fifteen-row contribution table totalling 4286.">
+    <figcaption><span class="shotno">Figure 9.2</span>The breakdown panel — the "show your work" component. Fifteen rows, one per place, each showing the supplied round trip, how much it matters, and the product of the two; the column sums to the same 4,286 used for ranking, with the raw unweighted total (1,320 min) and the importance total (49) shown alongside for comparison. Above it, <strong>The Meridian is visible with travel score 2,815 — the best of all ten — and still unranked</strong>, over budget by 2,060. That is story condition 2, on screen.</figcaption>
+  </figure>
+
+  <h3>The demonstration script</h3>
+  <ul class="tight">
+    <li><strong>Load.</strong> 25 labelled markers, 7 ranked hotels, 3 marked over budget, Lantern Court Inn recommended.</li>
+    <li><strong>Inspect.</strong> Click any hotel — exactly 15 links appear, from that hotel only, and the breakdown table below updates. Hover a link for <code>place — X min × importance Y = Z</code>.</li>
+    <li><strong>Cross the budget boundary.</strong> Set the budget to 6,790 and The Meridian takes rank 1. Set it to 6,789 and it returns to over budget by 1.</li>
+    <li><strong>Flip on importance.</strong> Change Glasswing Gardens from 4 to 1 — the recommendation moves to Copperline Lodge, and the box shows <em>was 4</em>.</li>
+    <li><strong>Break it deliberately.</strong> Type 9 into any importance box — the error banner appears and the entire ranking disappears rather than showing a stale one.</li>
+    <li><strong>Empty the budget.</strong> Set it to 0 — <code>NO_AFFORDABLE_HOTEL</code>, with no leftover winner.</li>
+    <li><strong>Reset.</strong> Everything returns to the starting state exactly.</li>
+  </ul>
+</section>
+
+<!-- ============================== 10 ============================== -->
+<section class="sheet" id="p10">
+  <div class="sheet-head">
+    <div class="plate-no">10</div>
+    <div class="titles">
+      <p class="eyebrow">Optional acceptance criterion</p>
+      <h2>The budget timeline</h2>
+    </div>
+  </div>
+
+  <blockquote>
+    <p><strong>Optional:</strong> Add a compact budget timeline showing the amounts at which the recommendation changes, while preserving the same affordability and ranking rules.</p>
+    <cite>Student_SPR26_D2_P03 — Acceptance Criteria</cite>
+  </blockquote>
+
+  <p>Rather than adding a feature to the application, this is presented as an analysis derived from the shipped dataset and the shipped ranking rules — a documented answer to the same question the optional feature would have asked.</p>
+
+  <h3>How it is derived</h3>
+  <p>Walk the hotels in ascending order of stay cost. Each becomes affordable exactly at its own price; at that moment, check whether its weighted travel total beats the best affordable total so far. If it does, the recommendation changes there. If it does not, nothing changes until the next hotel's price is reached.</p>
+
+  <div class="chart">
+    <svg viewBox="0 0 820 300" role="img" aria-label="Step chart: the recommended hotel changes at budgets 3,060, 3,190 and 6,790, moving from none, to Dockside, to Lantern Court, to Meridian.">
+      <line class="grid" x1="170" y1="60"  x2="790" y2="60"></line>
+      <line class="grid" x1="170" y1="110" x2="790" y2="110"></line>
+      <line class="grid" x1="170" y1="160" x2="790" y2="160"></line>
+      <line class="grid" x1="170" y1="210" x2="790" y2="210"></line>
+
+      <text class="lbl k" x="160" y="64"  text-anchor="end">MERIDIAN</text>
+      <text class="lbl k" x="160" y="114" text-anchor="end">LANTERN_COURT</text>
+      <text class="lbl"   x="160" y="164" text-anchor="end">DOCKSIDE</text>
+      <text class="lbl o" x="160" y="214" text-anchor="end">none affordable</text>
+
+      <line class="ax" x1="170" y1="245" x2="790" y2="245"></line>
+
+      <path class="step stepnone" d="M 170 210 L 423 210"></path>
+      <path class="step" d="M 423 210 L 423 160 L 434 160 L 434 110 L 731 110 L 731 60 L 790 60"></path>
+
+      <circle class="dot" cx="423" cy="160" r="4"></circle>
+      <circle class="dot" cx="434" cy="110" r="4"></circle>
+      <circle class="dot" cx="731" cy="60"  r="4"></circle>
+
+      <line class="mark" x1="558" y1="100" x2="558" y2="245"></line>
+      <text class="lbl o" x="562" y="96">initial budget 4,730</text>
+
+      <line class="ax" x1="423" y1="245" x2="423" y2="251"></line>
+      <line class="ax" x1="731" y1="245" x2="731" y2="251"></line>
+      <text class="lbl m" x="423" y="266" text-anchor="middle">3,060 / 3,190</text>
+      <text class="lbl m" x="731" y="266" text-anchor="middle">6,790</text>
+      <text class="lbl m" x="170" y="266" text-anchor="middle">0</text>
+      <text class="lbl m" x="790" y="266" text-anchor="end">budget →</text>
+
+      <text class="lbl m" x="480" y="286">only three change-points exist across the entire 0 – 1,000,000 range</text>
+    </svg>
+  </div>
+
+  <div class="scroller">
+    <table class="wrap">
+      <thead><tr><th class="num">Budget range</th><th>Recommended</th><th class="num">Total</th><th>Why it changes here</th></tr></thead>
+      <tbody>
+        <tr class="out"><td class="num">0 – 3,059</td><td class="name">—</td><td class="num">—</td><td>Nothing is affordable yet, so the result is <code>NO_AFFORDABLE_HOTEL</code>.</td></tr>
+        <tr><td class="num">3,060 – 3,189</td><td class="name">DOCKSIDE</td><td class="num">3,687</td><td>The cheapest hotel becomes affordable at its own price and is the only candidate.</td></tr>
+        <tr class="win"><td class="num">3,190 – 6,789</td><td class="name">LANTERN_COURT</td><td class="num">2,821</td><td>Becomes affordable and immediately beats Dockside's score. Holds the recommendation across the widest range — including the initial budget of 4,730.</td></tr>
+        <tr><td class="num">6,790 and above</td><td class="name">MERIDIAN</td><td class="num">2,815</td><td>The best-scoring hotel overall finally becomes affordable at its own price — story condition 5, exactly.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flag">
+    <p><strong>Dockside holds the recommendation for a window only 130 units wide.</strong> Seven hotels become affordable somewhere between 3,190 and 6,789 — Saltwind, Foxglove, Maple &amp; Vine, Copperline, Harbour Gate, Gilded Anchor and Ridgeview — and not one of them beats Lantern Court's 2,821, so the recommendation does not move at all across that entire stretch.</p>
+  </div>
+
+  <p class="note"><strong>This is verified, not estimated.</strong> The two upper boundaries are the same numbers already proven in <code>tests/computeComparison.test.js</code>: a budget of 6,789 still recommends Lantern Court, and 6,790 flips to Meridian. The chart is that verified behaviour extended across the whole budget range instead of sampled at two points.</p>
+</section>
+
+<footer class="end">
+  <span>Hotel Base-Camp Comparator · Candidate CC083</span>
+  <span>10 plates · all figures traced to source files</span>
+</footer>
+
+<script>
+  (function () {
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('.checklist input'));
+    var tally = document.getElementById('tally');
+    var KEY = 'hbc-req-checks';
+
+    function render() {
+      var done = boxes.filter(function (b) { return b.checked; }).length;
+      tally.textContent = done + ' of ' + boxes.length + ' ticked';
+    }
+
+    function save() {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(boxes.map(function (b) { return b.checked; })));
+      } catch (e) { /* storage unavailable — ticking still works for this session */ }
+    }
+
+    try {
+      var saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (Array.isArray(saved) && saved.length === boxes.length) {
+        boxes.forEach(function (b, i) { b.checked = !!saved[i]; });
+      }
+    } catch (e) { /* ignore */ }
+
+    boxes.forEach(function (b) {
+      b.addEventListener('change', function () { render(); save(); });
+    });
+
+    document.getElementById('clearall').addEventListener('click', function () {
+      boxes.forEach(function (b) { b.checked = false; });
+      render();
+      save();
+    });
+
+    render();
+  })();
+</script>
